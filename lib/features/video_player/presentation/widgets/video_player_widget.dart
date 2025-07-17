@@ -63,17 +63,20 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
 
   @override
   Widget build(BuildContext context) {
+    // Show the loader with opacity over the thumbnail until video is loaded
     if (!_isInitialized || _chewieController == null) {
-      return Container(
-        color: Colors.black,
-        child: Center(
-          child: CachedNetworkImage(
+      return Stack(
+        fit: StackFit.expand,
+        children: [
+          CachedNetworkImage(
             imageUrl: widget.thumbnailUrl,
             fit: BoxFit.cover,
             placeholder: (context, url) => Container(color: Colors.grey[300], child: const Center(child: CircularProgressIndicator())),
             errorWidget: (context, url, error) => Container(color: Colors.grey[300], child: const Icon(Icons.error)),
           ),
-        ),
+          Container(color: Colors.white.withOpacity(0.4)),
+          const Center(child: Opacity(opacity: 0.8, child: CircularProgressIndicator())),
+        ],
       );
     }
 

@@ -8,6 +8,27 @@ import '../../features/video_player/presentation/screens/video_details_screen.da
 import '../../features/profile/presentation/screens/profile_screen.dart';
 
 class AppRouter {
+  static GoRouter getRouter(bool isLoggedIn) {
+    return GoRouter(
+      initialLocation: isLoggedIn ? '/home' : '/login',
+      routes: [
+        GoRoute(path: '/', name: 'splash', builder: (context, state) => const SplashScreen()),
+        GoRoute(path: '/onboarding', name: 'onboarding', builder: (context, state) => const OnboardingScreen()),
+        GoRoute(path: '/login', name: 'login', builder: (context, state) => const LoginScreen()),
+        GoRoute(path: '/home', name: 'home', builder: (context, state) => const HomeScreen()),
+        GoRoute(
+          path: '/video/:id',
+          name: 'video_details',
+          builder: (context, state) {
+            final videoId = state.pathParameters['id']!;
+            return VideoDetailsScreen(videoId: videoId);
+          },
+        ),
+        GoRoute(path: '/profile', name: 'profile', builder: (context, state) => const ProfileScreen()),
+      ],
+    );
+  }
+
   static final GoRouter router = GoRouter(
     initialLocation: '/',
     routes: [

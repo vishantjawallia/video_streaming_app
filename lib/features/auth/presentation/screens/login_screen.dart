@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../bloc/auth_bloc.dart';
 
@@ -38,12 +39,24 @@ class _LoginScreenState extends State<LoginScreen> {
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthSuccess) {
+            // Store user data in shared_preferences
+            final user = state.user;
+            SharedPreferences.getInstance().then((prefs) {
+              prefs.setString('user_id', user.id);
+              prefs.setString('user_name', user.name);
+              prefs.setString('user_email', user.email);
+              if (user.profileImageUrl != null) {
+                prefs.setString('user_profile_image', user.profileImageUrl!);
+              } else {
+                prefs.remove('user_profile_image');
+              }
+            });
             context.go(AppConstants.homeRoute);
           } else if (state is AuthError) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message), backgroundColor: Colors.red));
           }
         },
-        child: Padding(
+        child: SingleChildScrollView(
           padding: EdgeInsets.all(20.w),
           child: Form(
             key: _formKey,

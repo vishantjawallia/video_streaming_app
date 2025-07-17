@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
-import 'package:go_router/go_router.dart';
-
 // Core
 import 'core/router/app_router.dart';
-import 'core/constants/app_constants.dart';
 import 'core/config/env_config.dart';
 import 'core/di/injection.dart';
 import 'core/theme/app_theme.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // Features
 import 'features/auth/presentation/bloc/auth_bloc.dart';
@@ -28,13 +26,18 @@ void main() async {
   // Initialize adaptive theme
   final savedThemeMode = await AdaptiveTheme.getThemeMode();
 
-  runApp(MyApp(savedThemeMode: savedThemeMode));
+  // Check login status
+  final prefs = await SharedPreferences.getInstance();
+  final isLoggedIn = prefs.getString('user_id') != null;
+
+  runApp(MyApp(savedThemeMode: savedThemeMode, isLoggedIn: isLoggedIn));
 }
 
 class MyApp extends StatelessWidget {
   final AdaptiveThemeMode? savedThemeMode;
+  final bool isLoggedIn;
 
-  const MyApp({super.key, this.savedThemeMode});
+  const MyApp({super.key, this.savedThemeMode, required this.isLoggedIn});
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +48,7 @@ class MyApp extends StatelessWidget {
       builder: (context, child) {
         return AdaptiveTheme(
           light: AppTheme.lightTheme,
+
           dark: AppTheme.darkTheme,
           initial: savedThemeMode ?? AdaptiveThemeMode.light,
           builder:
@@ -57,7 +61,7 @@ class MyApp extends StatelessWidget {
                   // Onboarding Cubit
                   BlocProvider<OnboardingCubit>.value(value: getIt<OnboardingCubit>()),
                 ],
-                child: MaterialApp.router(title: EnvConfig.appName, theme: theme, darkTheme: darkTheme, routerConfig: AppRouter.router, debugShowCheckedModeBanner: false),
+                child: MaterialApp.router(title: EnvConfig.appName, darkTheme: darkTheme, routerConfig: AppRouter.getRouter(isLoggedIn), debugShowCheckedModeBanner: false),
               ),
         );
       },

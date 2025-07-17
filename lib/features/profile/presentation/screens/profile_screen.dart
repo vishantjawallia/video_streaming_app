@@ -1,9 +1,16 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:video_streaming_app/core/theme/app_theme.dart';
+
 import '../../../../core/constants/app_constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -31,11 +38,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     super.dispose();
   }
 
-  void _loadUserData() {
-    // Mock user data - in real app, this would come from local storage or API
-    _nameController.text = 'John Doe';
-    _emailController.text = 'john.doe@example.com';
-    _profileImageUrl = 'https://picsum.photos/200/200';
+  void _loadUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    _nameController.text = prefs.getString('user_name') ?? '';
+    _emailController.text = prefs.getString('user_email') ?? '';
+    _profileImageUrl = prefs.getString('user_profile_image');
+    setState(() {});
   }
 
   Future<void> _pickImage() async {
@@ -66,9 +74,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
         centerTitle: true,
         actions: [
           IconButton(
-            icon: const Icon(Icons.logout),
+            icon: const Icon(Icons.share),
             onPressed: () {
+              final name = _nameController.text;
+              final email = _emailController.text;
+              final shareText = 'My Profile\nName: $name\nEmail: $email';
+              Share.share(shareText, subject: 'My Profile');
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () async {
               // Logout functionality
+              final prefs = await SharedPreferences.getInstance();
+              await prefs.remove('user_id');
+              await prefs.remove('user_name');
+              await prefs.remove('user_email');
+              await prefs.remove('user_profile_image');
               context.go(AppConstants.loginRoute);
             },
           ),
@@ -89,7 +111,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             CircleAvatar(
               radius: 60.r,
               backgroundColor: Colors.grey[300],
-              backgroundImage: _profileImageUrl != null ? CachedNetworkImageProvider(_profileImageUrl!) : null,
+              backgroundImage: _profileImageUrl != null ? FileImage(File(_profileImageUrl!)) : null,
               child: _profileImageUrl == null ? Icon(Icons.person, size: 60.w, color: Colors.grey[600]) : null,
             ),
             Positioned(
@@ -104,7 +126,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         SizedBox(height: 16.h),
         Text('John Doe', style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.bold)),
-        Text('john.doe@example.com', style: TextStyle(fontSize: 16.sp, color: Colors.grey[600])),
+        Text(_emailController.text ?? 'john.doe@example.com', style: TextStyle(fontSize: 16.sp, color: Colors.grey[600])),
       ],
     );
   }
@@ -185,6 +207,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             // Navigate to about screen
           },
         ),
+        const SizedBox(height: 20),
       ],
     );
   }

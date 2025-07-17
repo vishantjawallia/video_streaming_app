@@ -31,3 +31,47 @@ class AppTheme {
     ),
   );
 }
+
+
+
+enum AppThemeColor {
+  blue,
+  red,
+  green,
+  orange,
+  purple,
+}
+
+final Map<AppThemeColor, Color> appThemeColors = {
+  AppThemeColor.blue: Colors.blue,
+  AppThemeColor.red: Colors.red,
+  AppThemeColor.green: Colors.green,
+  AppThemeColor.orange: Colors.orange,
+  AppThemeColor.purple: Colors.purple,
+};
+
+ThemeData getThemeData(AppThemeColor color) {
+  final baseColor = appThemeColors[color]!;
+  return ThemeData(
+    primarySwatch: MaterialColor(
+      baseColor.value,
+      <int, Color>{
+        50: baseColor.withOpacity(.1),
+        100: baseColor.withOpacity(.2),
+        200: baseColor.withOpacity(.3),
+        300: baseColor.withOpacity(.4),
+        400: baseColor.withOpacity(.5),
+        500: baseColor,
+        600: baseColor.withOpacity(.7),
+        700: baseColor.withOpacity(.8),
+        800: baseColor.withOpacity(.9),
+        900: baseColor,
+      },
+    ),
+    colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blue).copyWith(
+      primary: baseColor,
+      secondary: baseColor,
+    ),
+    // ...other theme properties as needed
+  );
+}

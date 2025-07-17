@@ -78,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 IconButton(
                   icon: const Icon(Icons.person),
                   onPressed: () {
-                    context.go(AppConstants.profileRoute);
+                    context.push(AppConstants.profileRoute);
                   },
                 ),
               ],
