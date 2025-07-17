@@ -271,13 +271,10 @@ flutter build ios --release
 
 ## Future Enhancements
 
-- [ ] Push notifications
 - [ ] Offline video caching
-- [ ] Social features (comments, likes)
+- [ ] Social features (comments, likes) UI
 - [ ] Advanced search filters
-- [ ] Video upload functionality
 - [ ] Analytics integration
-- [ ] A/B testing support
 - [ ] Accessibility improvements
 
 ## License
