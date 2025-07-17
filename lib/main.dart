@@ -9,6 +9,7 @@ import 'core/router/app_router.dart';
 import 'core/constants/app_constants.dart';
 import 'core/config/env_config.dart';
 import 'core/di/injection.dart';
+import 'core/theme/app_theme.dart';
 
 // Features
 import 'features/auth/presentation/bloc/auth_bloc.dart';
@@ -43,20 +44,8 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true,
       builder: (context, child) {
         return AdaptiveTheme(
-          light: ThemeData(
-            useMaterial3: true,
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue, brightness: Brightness.light),
-            appBarTheme: const AppBarTheme(centerTitle: true, elevation: 0),
-            cardTheme: CardTheme(elevation: 4, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
-            elevatedButtonTheme: ElevatedButtonThemeData(style: ElevatedButton.styleFrom(elevation: 2, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)))),
-          ),
-          dark: ThemeData(
-            useMaterial3: true,
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue, brightness: Brightness.dark),
-            appBarTheme: const AppBarTheme(centerTitle: true, elevation: 0),
-            cardTheme: CardTheme(elevation: 4, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
-            elevatedButtonTheme: ElevatedButtonThemeData(style: ElevatedButton.styleFrom(elevation: 2, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)))),
-          ),
+          light: AppTheme.lightTheme,
+          dark: AppTheme.darkTheme,
           initial: savedThemeMode ?? AdaptiveThemeMode.light,
           builder:
               (theme, darkTheme) => MultiBlocProvider(

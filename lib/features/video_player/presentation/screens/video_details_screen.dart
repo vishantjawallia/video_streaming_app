@@ -36,10 +36,35 @@ class _VideoDetailsScreenState extends State<VideoDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(icon: const Icon(Icons.arrow_back), onPressed: () => context.pop()),
+        title: Text(_videoData['title'], style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis),
+        actions: [
+          IconButton(
+            icon: Icon(_isBookmarked ? Icons.bookmark : Icons.bookmark_border),
+            onPressed: () {
+              setState(() {
+                _isBookmarked = !_isBookmarked;
+              });
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.share),
+            onPressed: () {
+              Share.share('Check out this video: ${_videoData['title']}', subject: _videoData['title']);
+            },
+          ),
+        ],
+        elevation: 0,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      ),
       body: CustomScrollView(
         slivers: [
+          // SizedBox(height: 250.h, width: double.infinity, child: FlexibleSpaceBar(background: VideoPlayerWidget(videoUrl: _videoData['videoUrl'], thumbnailUrl: _videoData['thumbnailUrl']))),
           SliverAppBar(
-            expandedHeight: 250.h,
+            collapsedHeight: 0,
+            toolbarHeight: 0,
+            expandedHeight: 220.h,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(background: VideoPlayerWidget(videoUrl: _videoData['videoUrl'], thumbnailUrl: _videoData['thumbnailUrl'])),
             leading: IconButton(icon: const Icon(Icons.arrow_back), onPressed: () => context.pop()),
@@ -209,4 +234,3 @@ class _VideoDetailsScreenState extends State<VideoDetailsScreen> {
     return "$twoDigitMinutes:$twoDigitSeconds";
   }
 }
- 

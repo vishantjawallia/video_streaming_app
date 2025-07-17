@@ -7,6 +7,10 @@ import '../../../../core/constants/app_constants.dart';
 import '../bloc/home_bloc.dart';
 import '../widgets/video_card.dart';
 import '../widgets/category_tabs.dart';
+// import 'package:google_fonts/google_fonts.dart';
+import 'dart:io';
+import '../../../../core/theme/app_theme.dart';
+import '../../../../core/utils/platform_dialog.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -61,12 +65,8 @@ class _HomeScreenState extends State<HomeScreen> {
               floating: false,
               pinned: true,
               flexibleSpace: FlexibleSpaceBar(
-                title: Text('Video Streaming', style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold)),
-                background: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Theme.of(context).primaryColor, Theme.of(context).primaryColor.withOpacity(0.8)]),
-                  ),
-                ),
+                title: Text('Video Streaming', style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.white, shadows: [Shadow(blurRadius: 8, color: Colors.black26)])),
+                background: Container(decoration: BoxDecoration(gradient: LinearGradient(colors: [Theme.of(context).colorScheme.primary, Theme.of(context).colorScheme.secondary]))),
               ),
               actions: [
                 IconButton(
@@ -114,7 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
       itemCount: 6,
       itemBuilder: (context, index) {
         return Shimmer.fromColors(
-          baseColor: Colors.grey[300]!,
+          baseColor: Colors.grey.shade300,
           highlightColor: Colors.grey[100]!,
           child: Container(height: 200.h, margin: EdgeInsets.only(bottom: 16.h), decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12.r))),
         );
@@ -140,7 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
         return VideoCard(
           video: video,
           onTap: () {
-            context.go('/video/${video.id}');
+            context.push('/video/${video.id}');
           },
         );
       },

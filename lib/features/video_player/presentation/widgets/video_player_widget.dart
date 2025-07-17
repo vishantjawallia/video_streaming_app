@@ -37,13 +37,13 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
         allowFullScreen: true,
         allowMuting: true,
         showControls: true,
-        materialProgressColors: ChewieProgressColors(playedColor: Colors.red, handleColor: Colors.red, backgroundColor: Colors.grey, bufferedColor: Colors.grey[300]!),
-        placeholder: CachedNetworkImage(
-          imageUrl: widget.thumbnailUrl,
-          fit: BoxFit.cover,
-          placeholder: (context, url) => Container(color: Colors.grey[300], child: const Center(child: CircularProgressIndicator())),
-          errorWidget: (context, url, error) => Container(color: Colors.grey[300], child: const Icon(Icons.error)),
-        ),
+        materialProgressColors: ChewieProgressColors(playedColor: Colors.red, handleColor: Colors.red, backgroundColor: Colors.grey, bufferedColor: Colors.grey.shade300),
+        // placeholder: CachedNetworkImage(
+        //   imageUrl: widget.thumbnailUrl,
+        //   fit: BoxFit.cover,
+        //   placeholder: (context, url) => Container(color: Colors.grey[300], child: const Center(child: CircularProgressIndicator())),
+        //   errorWidget: (context, url, error) => Container(color: Colors.grey[300], child: const Icon(Icons.error)),
+        // ),
       );
 
       setState(() {

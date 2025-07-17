@@ -35,7 +35,7 @@ class CategoryTabs extends StatelessWidget {
               backgroundColor: Colors.grey[200],
               selectedColor: Theme.of(context).primaryColor,
               checkmarkColor: Colors.white,
-              side: BorderSide(color: isSelected ? Theme.of(context).primaryColor : Colors.grey[300]!, width: 1),
+              side: BorderSide(color: isSelected ? Theme.of(context).primaryColor : Colors.grey.shade300, width: 1),
             ),
           );
         },
